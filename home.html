@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Task Manager</title>
+    <link rel="stylesheet" href="./style/style.css" />
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css" />
+    <!-- <link rel="stylesheet" href="./bootstrap/css/"> -->
+    <script src="https://kit.fontawesome.com/48b638308b.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" />
+
+    <!--Sweet alert-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.7/dist/sweetalert2.min.css" />
+</head>
+
+<body id="body-pd">
+    <header class="header bg-dark" id="header" style="border-bottom: 1px solid whitesmoke; width: 100%;">
+        <div class="header_toggle text-light d-flex" style="width: 100%;">
+            <div style="margin-right: auto;">
+                <i class="bx bx-menu my-auto" id="header-toggle" style="vertical-align: -webkit-baseline-middle"></i>
+            </div>
+
+            <div class="d-flex" style="margin-right: 1rem;">
+                <div class="createNote" data-bs-toggle="modal" data-bs-target="#form" style="margin-right: 2rem;">
+                    <span class="text-light"><i class="fa-solid fa-plus fa-lg" style="color: #e3e7ed;"></i></span>
+                </div>
+                <div class="dropdown mt-2">
+                    <button class="btn btn-secondary  dropdown-toggle my-auto" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false" style="background-color: black; width: auto; vertical-align: sub;">
+                        Filter
+                    </button>
+                    <ul class="dropdown-menu drop" style="width: auto;">
+                        <li style="padding-left: 11px">
+                            <input type="checkbox" id="complete" name="complete" /><span>
+                                Complete</span>
+                            <br />
+
+                            <input type="checkbox" id="incomplete" name="incomplete" />
+                            <span>Incomplete</span> <br />
+
+                            <input type="checkbox" id="personal" name="personal" />
+                            <span>Personal</span> <br />
+
+                            <input type="checkbox" id="professional" name="professional" />
+                            <span> Professional</span> <br />
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="l-navbar " id="nav-bar">
+        <nav class="nav">
+            <div>
+                <a href="#" class="nav_logo text-decoration-none">
+                    <i class="fa-solid fa-user fa-lg" style="color: #f1f4f8"></i>
+                    <span class="nav_logo-name fs-3" style="font-family: 'Times New Roman', Times, serif;" id="u-name"></span>
+                </a>
+                <div class="nav_list ">
+                    <a href="#" class="nav_link  text-decoration-none" onclick="allTask()">
+                        <i class="bx bx-grid-alt nav_icon" style="color: #f2f2f3"></i>
+                        <span class="nav_name text-light">All Task</span>
+                    </a>
+                    <a href="#" class="nav_link text-decoration-none" onclick="viewTask()">
+                        <i class="fa-solid fa-check-to-slot fa-lg" style="color: #f2f2f3"></i>
+                        <span class="nav_name text-light">Competed Task</span>
+                    </a>
+                    <a href="#" class="nav_link text-decoration-none" onclick="incompleteTask()">
+                        <i class="bx bx-message-square-detail nav_icon" style="color: #f2f2f3"></i>
+                        <span class="nav_name text-light">InComplete Task</span>
+                    </a>
+                    <a href="#" class="nav_link text-decoration-none" onclick="dateSort()">
+                        <i class="fa-regular fa-calendar-days fa-lg" style="color: #eff1f6"></i>
+                        <span class="nav_name text-light">Sort by Date</span>
+                    </a>
+                    <!-- <a href="#" class="nav_link"> <i class='bx bx-folder nav_icon'></i> <span
+                            class="nav_name">Files</span> </a>
+                    <a href="#" class="nav_link"> <i class='bx bx-bar-chart-alt-2 nav_icon'></i> <span
+                            class="nav_name">Stats</span> </a> -->
+                </div>
+            </div>
+            <a href="./index.html" class="nav_link text-decoration-none">
+                <i class="bx bx-log-out nav_icon" style="color: #f2f2f3"></i>
+                <span class="nav_name text-light">SignOut</span>
+            </a>
+        </nav>
+    </div>
+    <!--Container Main start-->
+
+    <div class="height-100 bg-dark">
+        <!-- <h2 class="text-dark">jkjkjkkjk</h2>
+        <h2 class="text-dark">jkjkjkkjk</h2> -->
+
+        <div class="right-dashboard">
+            <form class="modal" id="form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                Create Task
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="recipient-name" class="col-form-label">Title</label>
+                                    <input type="text" class="form-control input-title" id="recipient-name" />
+                                    <div id="msg"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message-text" class="col-form-label">Description</label>
+                                    <textarea class="form-control" id="message-text" style="resize: none"></textarea>
+                                </div>
+                                <div class="category">
+                                    <label for="category" class="col-form-label">Select category</label>
+                                    <select name="select" id="category">
+                                        <option value="personal">Personal</option>
+                                        <option value="professional">Professional</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="due-date" class="col-form-label">Due date</label>
+                                    <input type="date" class="form-control" id="due-date" onclick="duedate()" />
+                                </div>
+                            </form>
+                        </div>
+                        <div class="complete d-flex">
+                            <p class="btn btn-lg com-btn" style="background-color: rgb(198, 197, 195)"
+                                onclick="toggleComplete(this)" id="com-btn">
+                                complete
+                            </p>
+                        </div>
+                        <!-- <div class="priority">
+                           <input type="checkbox"> <h5><i class="fa-solid fa-flag fa-lg" style="color: #0f0f0f;"></i>Priority</h5>
+                        </div> -->
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary close-btn" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit" id="add" class="btn btn-primary save-btn">
+                                Save Task
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="notes mx-auto ms-4"></div>
+        </div>
+    </div>
+    <!--Container Main end-->
+
+    <script src="./main.js"></script>
+    <script src="./bootstrap/js/bootstrap.min.js"></script>
+    <script src="./bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.7/dist/sweetalert2.all.min.js"></script>
+
+    <script>
+        var urlParams = new URLSearchParams(window.location.search);
+        var username = urlParams.get("login_user_name");
+        var emailId = urlParams.get("login_email");
+        document.getElementById("u-name").innerText = `${username}`;
+
+        localStorage.getItem(username);
+
+        let modalOpen = document.querySelector(".createNote");
+        modalOpen.addEventListener("click", () => {
+            currentId = "";
+            reset();
+        });
+
+        let form = document.getElementById("form");
+        let inputTitle = document.querySelector(".input-title");
+        let description = document.querySelector("#message-text");
+        let category = document.querySelector("#category");
+        let dueDate = document.querySelector("#due-date");
+        let msg = document.getElementById("msg");
+        let notes = document.querySelector(".notes");
+        let add = document.getElementById("add");
+        let completeBtn = document.querySelector("#com-btn");
+        let filter = document.getElementById("filter");
+        let completed = document.getElementById("completed");
+        let right = document.querySelector(".right-dashboard");
+        let createNote = document.querySelector(".createNote");
+        let rightSide = document.querySelector(".rightside");
+        const due_date = document
+            .getElementById("due-date")
+            .setAttribute("min", duedate());
+
+        //Setting min attribute to Date
+        function duedate() {
+            var today = new Date();
+            var month = today.getMonth() + 1;
+            var day = today.getDate();
+            var year = today.getFullYear();
+            return `${year}-${month}-${day}`;
+        }
+
+        // Sweet alert while submiting the notes
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            validation();
+        });
+
+        let validation = () => {
+            if (inputTitle.value == "") {
+                msg.innerHTML = "Please enter the title";
+            } else {
+                msg.innerHTML = "";
+                acceeptData();
+                add.setAttribute("data-bs-dismiss", "modal");
+                add.click();
+
+                let timerInterval;
+                Swal.fire({
+                    title: "Note added successfuly",
+
+                    timer: 1000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                        const timer = Swal.getPopup().querySelector("b");
+                        timerInterval = setInterval(() => {
+                            timer.textContent = `${Swal.getTimerLeft()}`;
+                        }, 1000);
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                    },
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.timer) {
+                        console.log("I was closed by the timer");
+                    }
+                });
+                (() => {
+                    add.setAttribute("data-bs-dismiss", "");
+                })();
+            }
+        };
+
+        let data = [];
+
+        //pushing data to local storage
+        let acceeptData = () => {
+            if (currentId) {
+                data[currentId] = {
+                    text: inputTitle.value,
+                    description: description.value,
+                    category: category.value,
+                    dueDate: dueDate.value,
+                    status: completeBtn.innerHTML,
+                };
+                currentId = "";
+            } else {
+                data.push({
+                    text: inputTitle.value,
+                    description: description.value,
+                    category: category.value,
+                    dueDate: dueDate.value,
+                    status: completeBtn.innerHTML,
+                });
+            }
+
+            let setitem = localStorage.setItem(emailId, JSON.stringify(data));
+            createTask();
+        };
+
+        //creating a note
+        let createTask = () => {
+            notes.innerHTML = "";
+
+            if (data.length == 0) {
+                notes.innerHTML = `<h2 class ='text-white text-center w-100'> Create and Keep your notes here </h2>`;
+            }
+            data.map((x, y) => {
+                return (notes.innerHTML += `
+            <div class = 'singleNote text-white' id=${y} draggable='true' >
+                <span class="title ps-3 pt-2 text-white d-inline-block">${x.text}</span>
+                <span class ='date ps-3' style='color: #18ddff;'>${x.dueDate}</span>
+                <p class ='desc text-truncate ps-3' style = 'margin-top : 0; max-width: 150px;'width: fit-content;'>${x.description}</p>
+                <h6 class ='d-inline-block category ps-3 text-light text-info'  > category : ${x.category}</h6>
+                <p class="btn ms-3 com-btn " style ='width: fit-content; background-color: rgb(184 182 180);;'>${x.status}</p>
+               
+                <span class="options">
+                    <span onClick = 'editNote(this)' data-bs-toggle="modal" data-bs-target="#form"><i class="fa-solid fa-pen-to-square fa-lg ps-3"></i></span>
+                    <span onClick = 'deleteNote(this)'><i class="fa-solid fa-trash fa-lg pe-3" ></i></span>
+                </span>
+            </div>
+
+            `);
+            });
+
+            reset();
+
+            notes.addEventListener("dragstart", dragStart);
+            notes.addEventListener("dragover", dragOver);
+            notes.addEventListener("drop", dragDrop);
+        };
+
+        // Toggle Button
+        let toggleComplete = (button) => {
+            // console.log(button)
+            console.log(data.status)
+  
+       
+            if (data.status === "Incomplete") {
+                data.status = 'complete'
+                button.style.backgroundColor = "green";
+                button.style.color = 'white'
+            } else{
+                data.status = 'Incomplete';
+                button.style.backgroundColor = "red";
+                button.style.color = 'white'
+            }
+            button.innerText = data.status;
+            button.style.color = data.color
+        };
+
+        let reset = () => {
+            inputTitle.value = "";
+            description.value = "";
+            category.value = "";
+            dueDate.value = "";
+            msg.innerHTML = "";
+            completeBtn.innerHTML = 'complete';
+            completeBtn.style.backgroundColor = 'green'
+            completeBtn.style.color = 'white'
+        };
+
+        // Delete Funcionality
+        function deleteNote(event) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success",
+                    });
+
+                    event.parentElement.parentElement.remove();
+                    data.splice(event.parentElement.parentElement.id, 1);
+                    localStorage.setItem(emailId, JSON.stringify(data));
+                }
+            });
+        }
+
+        // Edit Functionality
+        let editNote = (e) => {
+            let v = e.parentElement.parentElement;
+            currentId = v.id;
+            console.log(v, currentId);
+
+            inputTitle.value = v.children[0].innerHTML;
+            dueDate.value = v.children[1].innerHTML;
+            description.value = v.children[2].innerHTML;
+            category.value = v.children[3].innerHTML;
+
+            let completeButtonText = v.querySelector(".com-btn").innerText;
+            completeBtn.innerText = completeButtonText;
+            if(completeButtonText === 'complete'){
+                completeBtn.style.backgroundColor = 'green';
+                completeBtn.style.color = 'white'
+            }
+            else{
+                completeBtn.style.backgroundColor = 'red';
+                completeBtn.style.color = 'white'
+            }
+            // completeBtn.style.backgroundColor = completeBtnColor 
+            localStorage.setItem(emailId, JSON.stringify(data));
+        };
+        (() => {
+            data = JSON.parse(localStorage.getItem(emailId)) || [];
+            createTask();
+            console.log(data);
+        })();
+
+        //Filtering the complete
+        function viewTask() {
+            let getData = data.filter((a) => a.status == "complete");
+            createNote.style.display = "none";
+            notes.innerHTML = "";
+            if (getData.length == 0) {
+                notes.innerHTML = `<h1 class ='text-white w-100 d-flex align-items-center justify-content-center'> NO DATA FOUND </h1>`;
+            }
+            getData.forEach(
+                (val) =>
+                (notes.innerHTML += `
+            <div class = 'singleNote text-white' '>
+                <span class="title ps-3 pt-2 text-white d-inline-block">${val.text}</span>
+                <span style = 'color: #18ddff;' class = 'ps-3'>${val.dueDate}</span>
+                <p class= 'text-white desc ps-3 text-truncate' style = ' max-width: 150px;'>${val.description}</p>
+                <h6 class ='d-inline-block text-light category ps-3 text-info'> category : ${val.category}</h6>
+                <p class="btn btn-lg ms-3 com-btn" style ='width: fit-content; background-color: rgb(184 182 180);'>${val.status}</p>
+            </div>
+
+            `)
+            );
+        }
+
+        // Filtering the incomplete
+        function incompleteTask() {
+            let getData = data.filter((a) => a.status == "Incomplete");
+            console.log(getData.length);
+            createNote.style.display = "none";
+            notes.innerHTML = "";
+            if (getData.length == 0) {
+                notes.innerHTML = `<h1 class ='text-white w-100 d-flex align-items-center justify-content-center'> NO DATA FOUND </h1>`;
+            }
+
+            getData.forEach(
+                (val) =>
+                (notes.innerHTML += `
+            <div class = 'singleNote text-white' '>
+                <span class="title ps-3 pt-2 text-white d-inline-block">${val.text}</span>
+                <span style = ' color: #df8d22;' class = 'ps-3'>${val.dueDate}</span>
+                <p class= 'text-white desc text-truncate ps-3' style = ' max-width: 150px;'>${val.description}</p>
+                <h6 class ='d-inline-block text-light category ps-3 text-info'> category : ${val.category}</h6>
+                <p class="btn btn-lg ms-3 com-btn" style ='width: fit-content;background-color: rgb(184 182 180);'>${val.status}</p>
+            </div>
+
+            `)
+            );
+        }
+
+        // View all task
+        function allTask() {
+            let lValue = JSON.parse(localStorage.getItem(emailId));
+            createNote.style.display = "block";
+
+            createTask();
+        }
+
+        console.log(notes);
+
+        // Filter by date
+        function dateSort() {
+            data.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+            createTask();
+        }
+
+        // Drag and drop
+        let draggedNote;
+
+        function dragStart(event) {
+            draggedNote = event.target;
+        }
+
+        function dragOver(event) {
+            event.preventDefault();
+        }
+
+        function dragDrop(event) {
+            event.preventDefault();
+
+            let dropZone = event.target.closest(".singleNote");
+            if (dropZone) {
+                let draggedNoteIndex = parseInt(draggedNote.id);
+                let dropZoneIndex = parseInt(dropZone.id);
+
+                // Reorder the data array
+                let temp = data[draggedNoteIndex];
+                data[draggedNoteIndex] = data[dropZoneIndex];
+                data[dropZoneIndex] = temp;
+
+                createTask();
+            }
+        }
+
+        createTask();
+
+        // Multiple filter
+        let filterCheckboxes = document.querySelectorAll(
+            'input[type="checkbox"]'
+        );
+        filterCheckboxes.forEach((checkbox) => {
+            checkbox.addEventListener("change", applyFilters);
+        });
+
+        let a = data.map((val) => val.dueDate);
+
+        a.sort((a, b) => {
+            return Date.parse(a) - Date.parse(b);
+        });
+
+        function applyFilters() {
+            let selectedFilters = Array.from(filterCheckboxes)
+                .filter((checkbox) => checkbox.checked)
+                .map((checkbox) => checkbox.name);
+
+            let filteredData = data.filter((task) => {
+                return selectedFilters.every((filter) => {
+                    if (filter === "complete") {
+                        return task.status === "complete";
+                    } else if (filter === "incomplete") {
+                        return task.status === "Incomplete";
+                    } else if (filter === "personal") {
+                        return task.category === "personal";
+                    } else if (filter === "professional") {
+                        return task.category === "professional";
+                    }
+                    return false;
+                });
+            });
+
+            notes.innerHTML = "";
+            if (filteredData.length === 0) {
+                notes.innerHTML = `<h1 class ='text-white d-flex align-items-center' style = 'margin-left: 17rem; margin-bottom: 4rem;'> NO DATA FOUND </h1>`;
+            } else {
+                filteredData.forEach((task) => {
+                    notes.innerHTML += `
+                    <div class='singleNote text-white'>
+                        <span class="title ps-3 pt-2 text-white d-inline-block">${task.text}</span>
+                        <span class='date ps-3' style = 'color: #18ddff;'>${task.dueDate}</span>
+                        <p class='desc text-white ps-3 text-truncate' style="max-width: 150px;">${task.description}</p>
+                        <h6 class='d-inline-block text-light category ps-3'>category : ${task.category}</h6>
+                        <p class="btn ms-3 com-btn"  style="width: fit-content; background-color: rgb(184 182 180);;">${task.status}</p>
+                       
+                    </div>`;
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>

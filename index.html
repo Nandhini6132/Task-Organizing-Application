@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LOgin Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="./style/style.css">
+  </head>
+  <body>
+    
+    <div class="login" id="login">
+    <!--Login-->
+    <h1 class="login-head">Login</h1>
+    <!--EMAIL-->
+    <div class="login-email" >
+            <label for="login-user-nam" class="email">Email</label>
+            <input type="email" class="login-email-input ms-5" id="login-email" placeholder="example@gmail.com"  onkeyup="validate()">
+            <span class="error d-block" style="color: aqua;"></span>
+        </div>
+
+        <!--Username-->
+        <div class="login-username">
+            <label for="login-user-name" class="email">UserName</label>
+            <input type="text" class="login-uname-input ms-3" id="login-user-name"  onkeyup="validateName()">
+            <span class="error-name d-block" style="color: aqua;"></span>
+        </div>
+    <!--Password-->
+    <div class="login-password">
+            <label for="login-pwd" class="password">Password</label>
+            <input type="password" class="login-password-input ms-4" id="login-pwd">
+        </div>
+    <!--Submit-->
+    <div class="login-submit">
+           <a href="#" type='submit'> <button class="login-btn disabled"  onclick = 'reset()'>Submit</button></a>
+        </div>
+
+
+    </div> 
+  
+
+    <!-- <script src="./main.js"></script> -->
+
+    <script>
+// index.js (login page)
+let input = document.querySelector(".login-email-input");
+      let error = document.querySelector(".error");
+      let button = document.querySelector('.login-btn');
+      let error_name = document.querySelector('.error-name');
+      let login_user_name = document.getElementById('login-user-name')
+
+      function validate() {
+        const emailPattern =
+          /^[a-zA-Z0-9._%+-]+@gmail+\.[a-zA-Z]{3}$/;
+
+        if (!emailPattern.test(input.value)) {
+          error.innerHTML = "Please Enter a valid email address";
+         
+          return false;
+        }
+        error.innerHTML = "";
+        input.style.borderColor = "wheat";
+        return true;
+
+
+       
+      }
+
+      function validateName(){
+        const namePattern = /^[a-zA-Z]{4,15}$/;
+        if(!namePattern.test(login_user_name.value)){
+          error_name.innerHTML = 'Name must contain atleast 5 characteristics'
+          return false;
+        }
+
+        error_name.innerHTML = '';
+        login_user_name.borderColor = 'wheat';
+        return true
+      }
+
+      
+function reset() {
+  event.preventDefault();
+  var login_user_name = document.getElementById('login-user-name').value;
+  var login_email = document.getElementById('login-email').value;
+  var login_pwd = document.getElementById('login-pwd').value
+
+  const isValid = validate();
+  if (!isValid) {
+    return;
+  }
+
+  const isValidname = validateName();
+  if(!isValidname){
+    return
+  }
+  // Store the username in localStorage
+  let userKey = `${login_email}`
+  const userDataArray = JSON.parse(localStorage.getItem(userKey)) || [];
+  userDataArray.push({
+     email: login_email,
+     username: login_user_name,
+  
+ });
+
+ 
+
+
+  window.location.href = './home.html'  + '?login_user_name=' + encodeURIComponent(login_user_name) + '&login_email=' + encodeURIComponent(login_email) 
+
+  
+  login_email= '';
+  login_user_name = '';
+  login_pwd = ''; 
+
+ 
+}
+
+
+   
+ </script>
+<script>
+    
+      
+       
+       
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <!-- <script src="./bootstrap/js/bootstrap.min.js"></script> -->
+  </body>
+</html>
